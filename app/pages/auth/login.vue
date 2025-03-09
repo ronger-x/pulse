@@ -7,26 +7,26 @@ definePageMeta({
 })
 
 useSeoMeta({
-  title: 'Sign up'
+  title: 'Login'
 })
 
 const toast = useToast()
 
 const fields = [{
-  name: 'name',
-  type: 'text' as const,
-  label: 'Name',
-  placeholder: 'Enter your name'
-}, {
   name: 'email',
   type: 'text' as const,
   label: 'Email',
-  placeholder: 'Enter your email'
+  placeholder: 'Enter your email',
+  required: true
 }, {
   name: 'password',
   label: 'Password',
   type: 'password' as const,
   placeholder: 'Enter your password'
+}, {
+  name: 'remember',
+  label: 'Remember me',
+  type: 'checkbox' as const
 }]
 
 const providers = [{
@@ -44,7 +44,6 @@ const providers = [{
 }]
 
 const schema = z.object({
-  name: z.string().min(1, 'Name is required'),
   email: z.string().email('Invalid email'),
   password: z.string().min(8, 'Must be at least 8 characters')
 })
@@ -61,20 +60,27 @@ function onSubmit(payload: FormSubmitEvent<Schema>) {
     :fields="fields"
     :schema="schema"
     :providers="providers"
-    title="Create an account"
-    :submit="{ label: 'Create account' }"
+    title="Welcome back"
+    icon="i-lucide-lock"
     @submit="onSubmit"
   >
     <template #description>
-      Already have an account? <ULink
-        to="/login"
+      Don't have an account? <ULink
+        to="/auth/signup"
         class="text-primary-500 font-medium"
-      >Login</ULink>.
+      >Sign up</ULink>.
+    </template>
+
+    <template #password-hint>
+      <ULink
+        to="/public"
+        class="text-primary-500 font-medium"
+      >Forgot password?</ULink>
     </template>
 
     <template #footer>
-      By signing up, you agree to our <ULink
-        to="/"
+      By signing in, you agree to our <ULink
+        to="/public"
         class="text-primary-500 font-medium"
       >Terms of Service</ULink>.
     </template>
